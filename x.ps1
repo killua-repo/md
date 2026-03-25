@@ -31,7 +31,7 @@ Add-Type -AssemblyName WindowsBase
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Top bar بسيط جداً (بدون أزرار) -->
+            <!-- Top bar -->
             <Border Grid.Row="0"
                     Background="#020817"
                     CornerRadius="16,16,0,0"
@@ -47,7 +47,7 @@ Add-Type -AssemblyName WindowsBase
                 </Grid>
             </Border>
 
-            <!-- هنا داخل النافذة موقع الويب -->
+            <!-- Web site inside -->
             <WebBrowser x:Name="WebView"
                         Grid.Row="1"
                         Margin="6"
@@ -64,10 +64,10 @@ $window  = [Windows.Markup.XamlReader]::Load($reader)
 $DragBar = $window.FindName("DragBar")
 $WebView = $window.FindName("WebView")
 
-# تحميل موقعك داخل التطبيق (بدون فتح متصفح خارجي)
+# تحميل موقعك داخل التطبيق
 $WebView.Navigate("https://ousama.site/")
 
-# سحب النافذة من الـ top bar
+# سحب النافذة
 $DragBar.Add_MouseLeftButtonDown({
     $window.DragMove()
 })

@@ -1,14 +1,19 @@
 Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName PresentationCore
+Add-Type -AssemblyName WindowsBase
 
 [xml]$xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Ousama Web App"
         Width="1200"
         Height="720"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
+        ResizeMode="CanResize"
         AllowsTransparency="True"
-        Background="Transparent">
+        Background="Transparent"
+        FontFamily="Segoe UI">
     <Border Margin="10" Background="#020617" BorderBrush="#1E293B" BorderThickness="1.2" CornerRadius="16">
         <Grid>
             <Grid.RowDefinitions>
@@ -26,7 +31,7 @@ Add-Type -AssemblyName PresentationFramework
                 </Grid>
             </Border>
 
-            <WebView2 x:Name="WebView2" Grid.Row="1" Margin="6"/>
+            <WebBrowser x:Name="WebView" Grid.Row="1" Margin="6"/>
         </Grid>
     </Border>
 </Window>
@@ -36,13 +41,14 @@ $reader = New-Object System.Xml.XmlNodeReader $xaml
 $window = [Windows.Markup.XamlReader]::Load($reader)
 
 $DragBar = $window.FindName("DragBar")
-$WebView2 = $window.FindName("WebView2")
+$WebView = $window.FindName("WebView")
 
-# إضافة WebView2 Runtime
-Add-Type -Path "C:\Program Files (x86)\Microsoft\EdgeWebView\Application\*.dll" -ErrorAction SilentlyContinue
+# تحميل موقعك
+$WebView.Navigate("https://ousama.site/")
 
-$WebView2.Source = "https://ousama.site/"
-
-$DragBar.Add_MouseLeftButtonDown({ $window.DragMove() })
+# سحب النافذة
+$DragBar.Add_MouseLeftButtonDown({
+    $window.DragMove()
+})
 
 $window.ShowDialog() | Out-Null
